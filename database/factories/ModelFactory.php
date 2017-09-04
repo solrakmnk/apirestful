@@ -48,7 +48,7 @@ $factory->define(Product::class, function (Faker\Generator $faker) {
         'status'=>$faker->randomElement([Product::PRODUCTO_DISPONIBLE,Product::PRODUCTO_NO_DISPONIBLE]),
         'image'=>$faker->randomElement(['icon.png','logo.png','logo_b.png']),
         //'seller_id'=>User::inRandomOrder()->first()->id,
-        'seller_id'=>User::all()->random()->first()->id,
+        'seller_id'=>User::all()->random()->id,
     ];
 });
 
