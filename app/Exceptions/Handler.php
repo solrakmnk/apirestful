@@ -2,12 +2,15 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponser;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
+    use apiResponser;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -44,6 +47,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception instanceof ValidationException){
+            return $this->convertValidationExceptionToResponse($exception,$request);
+        }
         return parent::render($request, $exception);
     }
 
@@ -56,10 +62,33 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
+        //if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
-        }
+        //}
 
         return redirect()->guest(route('login'));
+    }
+    /**
+     * Create a response object from the given validation exception.
+     *
+     * @param  \Illuminate\Validation\ValidationException  $e
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+//        if ($e->response) {
+//            return $e->response;
+//        }
+//
+        $errors = $e->validator->errors()->getMessages();
+//
+        if ($request->expectsJson()) {
+            return $this->errorResponse($errors,422);
+        }
+//
+        return redirect()->back()->withInput(
+            $request->input()
+        )->withErrors($errors);
     }
 }
