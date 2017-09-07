@@ -87,9 +87,9 @@ class Handler extends ExceptionHandler
             }
             return $this->errorResponse($exception->getMessage(),$exception->getCode());
         }
-        if(config(app.debug)){
+        //if(config(app.debug)){
             return parent::render($request, $exception);
-        }
+        //}
         return $this->errorResponse("Falla inesperada",500);
 
     }

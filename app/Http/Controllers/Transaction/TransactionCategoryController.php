@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 class TransactionCategoryController extends ApiController
 {
 
-    public function index()
+    public function index(Transaction $transaction)
     {
-        $transaction=Transaction::find(1);
-        return showAll($transaction);
+        $categories=$transaction->product->categories;
+        return $this->showAll($categories);
     }
 }
