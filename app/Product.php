@@ -19,10 +19,13 @@ class Product extends Model
         'image',
         'seller_id'
     ];
+    protected $hidden=[
+        'pivot'
+    ];
     protected $dates=['deleted_at'];
 
     public function estaDisponible(){
-        return $this->status==Prodcuct::PRODDUCTO_DISPONIBLE;
+        return $this->status==Product::PRODUCTO_DISPONIBLE;
     }
     public function categories(){
         return $this->belongsToMany(Category::class);
