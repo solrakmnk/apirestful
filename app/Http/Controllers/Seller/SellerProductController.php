@@ -8,6 +8,7 @@ use App\Seller;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SellerProductController extends ApiController
 {
@@ -70,10 +71,7 @@ class SellerProductController extends ApiController
         ];
         $this->validate($request,$rules);
 
-        if($seller->id!=$product->seller_id){
-            return $this->errorResponse('El vendedor especificado no es el vendedor del producto',422);
-        }
-
+        $this->verificarVendedor($seller,$product);
 
         $product->fill($request->intersect([
             'name',
@@ -87,7 +85,6 @@ class SellerProductController extends ApiController
             if($product->estaDisponible() && $product->categories()->count()==0){
                 return $this->errorResponse('Un producto activo debe tener al menos una categoria',422);
             }
-
 
         }
 
@@ -107,8 +104,19 @@ class SellerProductController extends ApiController
      * @param  \App\Seller  $seller
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Seller $seller)
+    public function destroy(Seller $seller,Product $product)
     {
-        //
+        $this->verificarVendedor($seller,$product);
+
+        $product->delete();
+
+        return $this->showOne($product);
+    }
+
+    protected function verificarVendedor(Seller $seller, Product $product)
+    {
+        if ($seller->id != $product->seller_id) {
+            throw new HttpException(422, 'El vendedor especificado no es el vendedor real del producto');
+        }
     }
 }
