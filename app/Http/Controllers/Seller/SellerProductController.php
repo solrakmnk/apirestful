@@ -43,7 +43,7 @@ class SellerProductController extends ApiController
         $data=$request->all();
 
         $data['status']=Product::PRODUCTO_NO_DISPONIBLE;
-        $data['image']='icon.png';
+        $data['image']=$request->image->store('');//sin nombre de archivo laravel genera un nombre aleatorio unico images ya esta default
         $data['seller_id']=$seller->id;
 
         $product=Product::create($data);
