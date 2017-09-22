@@ -1,4 +1,13 @@
-Hola {{$user->name}}
-Gracias por crear una cuenta, por favor verificala usando el enlace:
+@component('mail::message')
 
-{{route('verify',$user->verification_token)}}
+    Hola {{$user->name}}
+
+    Gracias por crear una cuenta
+
+    @component('mail::button', ['url' => route('verify',$user->verification_token)])
+        Confirmar cuenta
+    @endcomponent
+
+    Gracias,<br>
+    {{ config('app.name') }}
+@endcomponent
