@@ -24,8 +24,7 @@ class CategoryBuyerController extends ApiController
             ->collapse()
             ->pluck('buyer')
             ->unique()
-            ->values()
-        ;
+            ->values();
 
         return $this->showAll($buyers);
     }
