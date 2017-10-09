@@ -14,7 +14,6 @@ class TransactionTransformer extends TransformerAbstract
      */
     public function transform(Transaction $transaction)
      {
-         dd($transaction);
 
          return [
              'identificador' => (int)$transaction->id,
