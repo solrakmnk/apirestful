@@ -48,15 +48,29 @@ class CategoryTransformer extends TransformerAbstract
              ]
          ];
      }
+
     public static function originalAttribute($index)
     {
         $attributes = [
-            'identificador' => 'id',
-            'titulo' => 'name',
-            'detalles' => 'description',
-            'fechaCreacion' => 'created_at',
+            'identificador'      => 'id',
+            'titulo'             => 'name',
+            'detalles'           => 'description',
+            'fechaCreacion'      => 'created_at',
             'fechaActualizacion' => 'updated_at',
-            'fechaEliminacion' => 'deleted_at',
+            'fechaEliminacion'   => 'deleted_at',
+        ];
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
+
+    public static function transformedAttribute($index)
+    {
+        $attributes = [
+            'id'          => 'identificador',
+            'name'        => 'titulo',
+            'description' => 'detalles',
+            'created_at'  => 'fechaCreacion',
+            'updated_at'  => 'fechaActualizacion',
+            'deleted_at'  => 'fechaEliminacion',
         ];
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
