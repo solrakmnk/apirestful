@@ -94,7 +94,7 @@ class Handler extends ExceptionHandler
         //if(config(app.debug)){
             return parent::render($request, $exception);
         //}
-        return $this->errorResponse("Falla inesperada",500);
+        //return $this->errorResponse("Falla inesperada",500);
 
     }
 
@@ -107,11 +107,14 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        if ($request->expectsJson()) {
-            return $this->errorResponse("No autenticado",401);
+//        if ($request->expectsJson()) {
+//            return $this->errorResponse("No autenticado",401);
+//        }
+        if ($this->isFrontend($request)) {
+            return redirect()->guest(route('login'));
         }
+        return $this->errorResponse("No autenticado",401);
 
-        return redirect()->guest(route('login'));
     }
     /**
      * Create a response object from the given validation exception.
@@ -127,13 +130,24 @@ class Handler extends ExceptionHandler
 //        }
 //
         $errors = $e->validator->errors()->getMessages();
-//
-        if ($request->expectsJson()) {
-            return $this->errorResponse($errors,422);
+
+        if ($this->isFrontend($request)) {
+            return $request->ajax()?response()->json($errors,422): redirect()->back()
+                ->withInput($request->input())
+                ->withErrors($errors);
         }
+        return $this->errorResponse($errors,422);
 //
-        return redirect()->back()->withInput(
-            $request->input()
-        )->withErrors($errors);
+//        if ($request->expectsJson()) {
+//            return $this->errorResponse($errors,422);
+//        }
+//
+//        return redirect()->back()->withInput(
+//            $request->input()
+//        )->withErrors($errors);
+    }
+
+    private  function isFrontend($request){
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 }
