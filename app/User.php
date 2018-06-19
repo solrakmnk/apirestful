@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
+    use \Laravel\Passport\HasApiTokens;
+
 
     const USUARIO_VERIFICADO="1";
     const USUARIO_NO_VERIFICADO="0";
