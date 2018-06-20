@@ -32,5 +32,13 @@ class AuthServiceProvider extends ServiceProvider
         Passport::tokensExpireIn(Carbon::now()->addMinutes(30));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));//30 dias para actualizar el token original, si no se tiene que hacer flujo de autorizacion
         Passport::enableImplicitGrant();
+        Passport::tokensCan([
+            'purchase-product'=>'Crear Transacciones para comprar productos determinados',
+            'manage-products'=>'Crear, ver, actualizar y eliminar productos',
+            'manage-account'=>'Obtener informacion de la cuenta, nombre, email, estado, sin contraseña, 
+                                modificar datos como email , nombre y contraseña,No puede eliminar cuenta',
+            'read-general'=>'Obtener informacion general, categorias donde se compra y se vende,
+                            productos vendidos o comprados, transacciones, compras y ventas'
+            ]);
     }
 }
