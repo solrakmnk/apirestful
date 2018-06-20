@@ -4,6 +4,8 @@ namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use Laravel\Passport\Http\Middleware\CheckForAnyScope;
+use Laravel\Passport\Http\Middleware\CheckScopes;
 
 class Kernel extends HttpKernel
 {
@@ -60,6 +62,8 @@ class Kernel extends HttpKernel
         'client.credentials'=> CheckClientCredentials::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \App\Http\Middleware\CustomThrottleRequests::class,
+        'scope'=> CheckForAnyScope::class, //Verifica que por lo menos se haga uso de un scope el access token
+        'scopes'=>  CheckScopes::class, //Verifica que todos sean validos
         'signature'=>\App\Http\Middleware\SignatureMiddleware::class,
         'transform.input'=>\App\Http\Middleware\TransformInput::class,
     ];
