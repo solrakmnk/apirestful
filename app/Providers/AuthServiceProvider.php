@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Buyer;
 use App\Policies\BuyerPolicy;
 use App\Policies\SellerPolicy;
+use App\Policies\TransactionPolicy;
 use App\Policies\UserPolicy;
 use App\Seller;
+use App\Transaction;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -25,7 +27,8 @@ class AuthServiceProvider extends ServiceProvider
        // 'App\Model' => 'App\Policies\ModelPolicy',
         Buyer::class=>BuyerPolicy::class,
         Seller::class=>SellerPolicy::class,
-        User::class=>UserPolicy::class
+        User::class=>UserPolicy::class,
+        Transaction::class=>TransactionPolicy::class
     ];
 
     /**
